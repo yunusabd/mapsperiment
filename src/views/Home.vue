@@ -68,6 +68,7 @@ export default {
         .catch(e => console.log(e))
     },
     init () {
+      // THREE.js setup
       this.scene = new THREE.Scene()
       const clock = new THREE.Clock()
       this.camera = new THREE.PerspectiveCamera(
@@ -127,11 +128,13 @@ export default {
     },
     svgCreated () {
       const loader = new SVGLoader()
+      // Turn the SVG into a url to a blob, so the loader can read it
       var svgBlob = new Blob([this.svg], { type: 'image/svg+xml;charset=utf-8' })
       const svgUrl = URL.createObjectURL(svgBlob)
       loader.load(
         svgUrl,
         data => {
+          // Parse SVG
           var paths = data.paths
           var shapes = []
           for (var i = 0; i < paths.length; i++) {
@@ -143,6 +146,7 @@ export default {
             curveSegments: 4,
             bevelEnabled: true
           }
+          // Extrude 3D shape from SVG paths
           var geometry = new THREE.ExtrudeBufferGeometry(shapes, extrusionSettings)
           geometry.center()
           const material = new THREE.MeshToonMaterial({
@@ -157,6 +161,8 @@ export default {
           const max = mesh.geometry.boundingBox.max
           const min = mesh.geometry.boundingBox.min
           const scale = mesh.scale
+
+          // Calculate the location of our coordinates relative to the 3D object
           const deltaX = (max.x - min.x) * scale.x
           const deltaY = (max.y - min.y) * scale.y
 
@@ -193,13 +199,14 @@ export default {
           const startPositionX = -(mapWidthWithoutPadding / 2)
           const startPositionY = mapHeightWithoutPadding / 2
 
-          this.coordinates.forEach((el, index) => {
+          // Create spheres as coordinate markers
+          this.coordinates.forEach((el) => {
             geometry = new THREE.SphereGeometry(1, 16, 16)
             const material2 = new THREE.MeshToonMaterial({ color: 'blue' })
             const sphere = new THREE.Mesh(geometry, material2)
             sphere.position.set(
               el.relativeLat + startPositionX,
-              2 * index,
+              1,
               -el.relativeLon + startPositionY
             )
             this.scene.add(sphere)
@@ -213,7 +220,7 @@ export default {
         },
         // called when loading has errors
         function (error) {
-          console.log('An error happened', error)
+          console.log('An error occured', error)
         }
       )
     },
