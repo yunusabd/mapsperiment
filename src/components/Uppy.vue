@@ -8,16 +8,14 @@ import Dashboard from '@uppy/dashboard'
 import exifr from 'exifr'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
+
 export default {
   name: 'Uppy',
   data () {
     return {
       dimensions: false,
       uppy: null,
-      items: [],
-      modelPath:
-        'https://traveldays-test.s3.eu-central-1.amazonaws.com/models/emoji_model_uint16/model.json',
-      model: null
+      items: []
     }
   },
   mounted () {
@@ -113,6 +111,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+#drag-drop-area {
+    max-width: 100%;
+}
+
 .uppy-Dashboard-inner {
   min-height: auto !important;
   max-width: auto !important;
